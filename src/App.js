@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import AppSvg from "./AppSvg";
 import mixin from "./Styles/Mixin";
 
 export default function App() {
+  const [input, setInput] = useState("");
+
+  const handleInput = (e) => {
+    setInput(e.target.value);
+  };
+
   return (
     <Container>
       <Header>
         <HeadTitle>Create a new repository</HeadTitle>
         <Details>
           A repository contains all project files, including the revision
-          history. Already have a project repository elsewhere?
+          history. Already have a project repository elsewhere?{" "}
+          <Link href="/">Import a repository.</Link>
         </Details>
       </Header>
       <RepoTemplate>
@@ -19,7 +26,7 @@ export default function App() {
           Start your repository with a template repository's contents.
         </RepoDetail>
         <SelectBox>
-          <SelectBoxTitle>No Template</SelectBoxTitle>
+          <SelectBoxTitle>No template</SelectBoxTitle>
         </SelectBox>
       </RepoTemplate>
       <RepoInfoSection>
@@ -33,7 +40,7 @@ export default function App() {
           <Divider>/</Divider>
           <RepoInfoBox>
             <RepoLabel strong>Repository name</RepoLabel>
-            <RepoInput />
+            <RepoInput onChange={handleInput} />
           </RepoInfoBox>
         </RepoInfoWrapper>
         <Suggestion>
@@ -51,7 +58,6 @@ export default function App() {
               value="public"
               name="repoAccess"
               checked="checked"
-              onChange={(e) => console.log(e)}
             />
             Public
           </RepoLabel>
@@ -63,12 +69,7 @@ export default function App() {
         </CheckBoxForm>
         <CheckBoxForm>
           <RepoLabel>
-            <RadioInput
-              type="radio"
-              value="private"
-              name="repoAccess"
-              onChange={(e) => console.log(e)}
-            />
+            <RadioInput type="radio" value="private" name="repoAccess" />
             Private
           </RepoLabel>
           {AppSvg.private}
@@ -88,7 +89,8 @@ export default function App() {
             Add a README file
           </RepoLabel>
           <RepoDetail>
-            This is where you can write a long description for your project.
+            This is where you can write a long description for your project.{" "}
+            <Link href="/">Learn more</Link>
           </RepoDetail>
         </InitializingCheckBox>
         <InitializingCheckBox>
@@ -97,7 +99,8 @@ export default function App() {
             Add .gitignore
           </RepoLabel>
           <RepoDetail>
-            Choose which files not to track from a list of templates.
+            Choose which files not to track from a list of templates.{" "}
+            <Link href="/">Learn more</Link>
           </RepoDetail>
         </InitializingCheckBox>
         <InitializingCheckBox>
@@ -106,11 +109,15 @@ export default function App() {
             Choose a license
           </RepoLabel>
           <RepoDetail>
-            A license tells others what they can and can't do with your code.
+            A license tells others what they can and can't do with your code.{" "}
+            <Link href="/">Learn more</Link>
           </RepoDetail>
         </InitializingCheckBox>
       </InitializingSection>
-      <CreateRepo> Create repository </CreateRepo>
+      <CreateRepo disabled={input.length ? false : true}>
+        {" "}
+        Create repository{" "}
+      </CreateRepo>
     </Container>
   );
 }
@@ -138,6 +145,14 @@ const Details = styled.p`
   margin-bottom: 16px;
   font-size: 14px;
   color: #586069;
+`;
+
+const Link = styled.a`
+  color: #0366d6;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const RepoTemplate = styled.div`
@@ -169,11 +184,7 @@ const SelectBox = styled.details``;
 
 const SelectBoxTitle = styled.summary`
   display: inline-block;
-  padding: 5px 16px;
-  border: 1px solid;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
+  ${mixin.summary()}
 `;
 
 const RepoInfoSection = styled.div``;
@@ -188,7 +199,7 @@ const RepoInfoBox = styled.div`
 `;
 
 const RepoInput = styled.input`
-  ${mixin.input}
+  ${mixin.input()}
 `;
 
 const Divider = styled.span`
@@ -208,6 +219,7 @@ const Suggestion = styled.p`
 const Strong = styled.strong`
   display: inline;
   color: #22863a;
+  font-weight: 600;
   cursor: pointer;
 `;
 
@@ -238,8 +250,18 @@ const InitializingCheckBox = styled.div`
   margin-bottom: 16px;
 `;
 
-const CheckboxInput = styled.input``;
+const CheckboxInput = styled.input`
+  margin-right: 8px;
+`;
 
 const CreateRepo = styled.button`
-  margin-top: 15px;
+  ${({ disabled }) =>
+    disabled
+      ? mixin.button()
+      : mixin.button(
+          "#fff",
+          "#2ea44f",
+          "rgba(27, 31, 35, 0.15)",
+          "0 1px 0 rgba(27, 31, 35, 0.1), inset 0 1px 0 hsla(0, 0%, 100%, 0.03)"
+        )}
 `;

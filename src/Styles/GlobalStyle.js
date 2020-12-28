@@ -44,6 +44,10 @@ ol[class] {
   list-style: none;
 }
 
+a {
+  text-decoration: none;
+}
+
 a:not([class]) {
   text-decoration-skip-ink: auto;
 }
@@ -60,7 +64,8 @@ article > * + * {
 input,
 button,
 textarea,
-select {
+select,
+summary {
   cursor: pointer;
   font: inherit;
 }
